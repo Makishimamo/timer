@@ -27,10 +27,19 @@ function recordLap() {
         alert("Veuillez démarrer le chronomètre avant d'enregistrer un LAP !");
         return;
     }
+    const dossardNumber = document.getElementById("dossard-number").value;
+    if (!dossardNumber) {
+        alert("Veuillez entrer un numéro de dossard !");
+        return;
+    }
     const lapTime = Date.now() - startTime;
-    laps.push(formatTime(lapTime));
-    displayLapTime(formatTime(lapTime));
-    console.log(`LAP enregistré : ${formatTime(lapTime)}`);
+    const lapData = {
+        time: formatTime(lapTime),
+        dossard: dossardNumber
+    };
+    laps.push(lapData);
+    displayLapTime(lapData);
+    console.log(`LAP enregistré : ${lapData.time} - Dossard: ${lapData.dossard}`);
 }
 
 /**
@@ -83,10 +92,10 @@ function padNumber(num) {
  * Affiche le temps d'un LAP dans la liste.
  * @param {string} time - Temps formaté HH:MM:SS.mmm.
  */
-function displayLapTime(time) {
+function displayLapTime(lapData) {
     const lapList = document.getElementById("laps-list");
     const lapElement = document.createElement("li");
-    lapElement.textContent = `LAP ${laps.length}: ${time}`;
+    lapElement.textContent = `LAP ${laps.length}: ${lapData.time} - Dossard: ${lapData.dossard}`;
     lapList.appendChild(lapElement);
 }
 
@@ -101,7 +110,8 @@ function exportToExcel() {
 
     const data = laps.map((lap, index) => ({
         "Numéro du LAP": index + 1,
-        "Temps (HH:MM:SS.mmm)": lap,
+        "Temps (HH:MM:SS.mmm)": lap.time,
+        "Numéro de dossard": lap.dossard
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(data);
