@@ -99,9 +99,7 @@ function displayLaps() {
             </div>
             <div class="lap-runner">
                 <input type="text" class="dossard-input" placeholder="N° dossard" value="${lap.dossard}">
-                ${lap.runnerInfo ? `
-                    <span class="runner-name">${lap.runnerInfo.nom} ${lap.runnerInfo.prenom}</span>
-                ` : ''}
+                <span class="runner-name">${lap.runnerInfo ? `${lap.runnerInfo.nom} ${lap.runnerInfo.prenom}` : ''}</span>
             </div>
         `;
 

@@ -136,6 +136,47 @@ body {
     overflow-y: auto;
 }
 
+.lap-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.lap-info {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.lap-number {
+    font-weight: bold;
+    min-width: 60px;
+}
+
+.lap-time {
+    font-family: monospace;
+    min-width: 120px;
+}
+
+.lap-runner {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.dossard-input {
+    width: 100px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.runner-name {
+    min-width: 200px;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .sidebar {
