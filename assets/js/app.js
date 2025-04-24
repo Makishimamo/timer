@@ -108,8 +108,28 @@ function displayLapTime(lapData, index) {
     dossardInput.style.width = "100px";
     
     dossardInput.addEventListener("change", function() {
-        laps[index].dossard = this.value;
-        console.log(`Dossard ${this.value} ajouté pour le LAP ${index + 1}`);
+        const dossardNumber = this.value;
+        const runners = JSON.parse(localStorage.getItem('runners') || '[]');
+        const runner = runners.find(r => r.dossard == dossardNumber);
+        
+        if (runner) {
+            // Mise à jour des données du LAP
+            laps[index].dossard = dossardNumber;
+            laps[index].runnerInfo = {
+                nom: runner.nom,
+                prenom: runner.prenom,
+                sexe: runner.sexe,
+                anneeNaissance: runner.anneeNaissance
+            };
+            
+            // Sauvegarde dans le localStorage
+            localStorage.setItem('laps', JSON.stringify(laps));
+            
+            console.log(`Dossard ${dossardNumber} ajouté pour le LAP ${index + 1}`);
+        } else {
+            alert("Ce numéro de dossard n'existe pas dans la liste des coureurs !");
+            this.value = "";
+        }
     });
     
     lapElement.appendChild(lapInfo);

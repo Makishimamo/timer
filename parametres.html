@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paramètres</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+<body>
+    <h1>Paramètres</h1>
+
+    <!-- Barre de navigation -->
+    <nav style="background-color: white; padding: 10px; margin: -20px -20px 20px -20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <div style="max-width: 800px; margin: 0 auto; display: flex; justify-content: center; gap: 10px;">
+            <a href="index.html" style="text-decoration: none;">
+                <button style="background-color: #3498db;">Chronomètre</button>
+            </a>
+            <a href="import.html" style="text-decoration: none;">
+                <button style="background-color: #2ecc71;">Gérer les coureurs</button>
+            </a>
+            <a href="classement.html" style="text-decoration: none;">
+                <button style="background-color: #e74c3c;">Classement Scratch</button>
+            </a>
+            <a href="classement-categories.html" style="text-decoration: none;">
+                <button style="background-color: #9b59b6;">Classement par Catégorie</button>
+            </a>
+            <a href="parametres.html" style="text-decoration: none;">
+                <button style="background-color: #f1c40f;">Paramètres</button>
+            </a>
+        </div>
+    </nav>
+
+    <div id="settings-container" style="max-width: 800px; margin: 20px auto;">
+        <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2>Gestion des Catégories</h2>
+            
+            <div id="categories-list" style="margin-bottom: 20px;">
+                <h3>Catégories existantes</h3>
+                <table id="categories-table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Nom de la catégorie</th>
+                            <th>Âge minimum</th>
+                            <th>Âge maximum</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div id="add-category" style="background-color: #f8f9fa; padding: 20px; border-radius: 8px;">
+                <h3>Ajouter une catégorie</h3>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" id="category-name" placeholder="Nom de la catégorie" style="padding: 8px; flex: 2;">
+                    <input type="number" id="min-age" placeholder="Âge minimum" style="padding: 8px; flex: 1;">
+                    <input type="number" id="max-age" placeholder="Âge maximum" style="padding: 8px; flex: 1;">
+                    <button id="add-category-btn" style="background-color: #2ecc71;">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./assets/js/parametres.js"></script>
+</body>
+</html> 

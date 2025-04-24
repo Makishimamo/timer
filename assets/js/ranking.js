@@ -6,21 +6,19 @@ function displayRanking() {
     tbody.innerHTML = '';
 
     // Récupération des données
-    const runners = JSON.parse(localStorage.getItem('runners') || '[]');
     const laps = JSON.parse(localStorage.getItem('laps') || '[]');
 
     // Création du classement
     const ranking = laps.map(lap => {
-        const runner = runners.find(r => r.dossard == lap.dossard);
         return {
             dossard: lap.dossard,
-            nom: runner ? runner.nom : 'Inconnu',
-            prenom: runner ? runner.prenom : '',
-            sexe: runner ? runner.sexe : '',
-            anneeNaissance: runner ? runner.anneeNaissance : '',
+            nom: lap.runnerInfo ? lap.runnerInfo.nom : 'Inconnu',
+            prenom: lap.runnerInfo ? lap.runnerInfo.prenom : '',
+            sexe: lap.runnerInfo ? lap.runnerInfo.sexe : '',
+            anneeNaissance: lap.runnerInfo ? lap.runnerInfo.anneeNaissance : '',
             temps: lap.time
         };
-    });
+    }).filter(lap => lap.dossard); // Ne garder que les LAPs avec un dossard
 
     // Tri par temps
     ranking.sort((a, b) => {
