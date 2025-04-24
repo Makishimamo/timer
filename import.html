@@ -3,66 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Import des Coureurs</title>
+    <title>Gérer les coureurs</title>
     <link rel="stylesheet" href="./assets/css/styles.css">
 </head>
 <body>
-    <h1>Import des Coureurs</h1>
-
-    <!-- Barre de navigation -->
-    <nav style="background-color: white; padding: 10px; margin: -20px -20px 20px -20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <div style="max-width: 800px; margin: 0 auto; display: flex; justify-content: center; gap: 10px;">
-            <a href="index.html" style="text-decoration: none;">
-                <button style="background-color: #3498db;">Chronomètre</button>
-            </a>
-            <a href="import.html" style="text-decoration: none;">
-                <button style="background-color: #2ecc71;">Gérer les coureurs</button>
-            </a>
-            <a href="classement.html" style="text-decoration: none;">
-                <button style="background-color: #e74c3c;">Voir le classement</button>
-            </a>
-        </div>
-    </nav>
-
-    <div id="import-container" style="max-width: 800px; margin: 20px auto;">
-        <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <h2>Import des données</h2>
-            <p>Vous pouvez importer un fichier Excel avec les colonnes suivantes :</p>
-            <ul>
-                <li>DOSSARD (numérique)</li>
-                <li>NOM (texte)</li>
-                <li>PRENOM (texte)</li>
-                <li>SEXE (H ou F)</li>
-                <li>ANNEE_NAISSANCE (numérique)</li>
+    <div class="app-container">
+        <!-- Barre latérale de navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Menu</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="index.html">
+                        <span class="icon">⏱️</span>
+                        <span class="text">Chronomètre</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="import.html" class="active">
+                        <span class="icon">👥</span>
+                        <span class="text">Gérer les coureurs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="classement.html">
+                        <span class="icon">🏆</span>
+                        <span class="text">Classement Scratch</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="classement-categories.html">
+                        <span class="icon">📊</span>
+                        <span class="text">Classement par Catégorie</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="parametres.html">
+                        <span class="icon">⚙️</span>
+                        <span class="text">Paramètres</span>
+                    </a>
+                </li>
             </ul>
-            <input type="file" id="file-input" accept=".xlsx,.xls" style="margin: 10px 0;">
-            <button id="import-button">Importer</button>
-        </div>
+        </nav>
 
-        <div id="runners-list" style="margin-top: 20px; background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <h2>Liste des coureurs</h2>
-            <table id="runners-table" style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr>
-                        <th>Dossard</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Sexe</th>
-                        <th>Année de naissance</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
+        <!-- Contenu principal -->
+        <main class="main-content">
+            <h1>Gérer les coureurs</h1>
+            <div class="import-container">
+                <div class="import-section">
+                    <h2>Importer des coureurs</h2>
+                    <input type="file" id="fileInput" accept=".xlsx, .xls">
+                    <button id="importBtn">Importer</button>
+                </div>
 
-    <div style="text-align: center; margin-top: 20px;">
-        <a href="index.html" style="text-decoration: none;">
-            <button>Retour au chronomètre</button>
-        </a>
-        <a href="classement.html" style="text-decoration: none;">
-            <button>Voir le classement</button>
-        </a>
+                <div class="runners-section">
+                    <h2>Liste des coureurs</h2>
+                    <table id="runners-table">
+                        <thead>
+                            <tr>
+                                <th>Dossard</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Sexe</th>
+                                <th>Année de naissance</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>

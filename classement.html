@@ -3,60 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classement</title>
+    <title>Classement Scratch</title>
     <link rel="stylesheet" href="./assets/css/styles.css">
 </head>
 <body>
-    <h1>Classement</h1>
+    <div class="app-container">
+        <!-- Barre latérale de navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Menu</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="index.html">
+                        <span class="icon">⏱️</span>
+                        <span class="text">Chronomètre</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="import.html">
+                        <span class="icon">👥</span>
+                        <span class="text">Gérer les coureurs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="classement.html" class="active">
+                        <span class="icon">🏆</span>
+                        <span class="text">Classement Scratch</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="classement-categories.html">
+                        <span class="icon">📊</span>
+                        <span class="text">Classement par Catégorie</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="parametres.html">
+                        <span class="icon">⚙️</span>
+                        <span class="text">Paramètres</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
 
-    <!-- Barre de navigation -->
-    <nav style="background-color: white; padding: 10px; margin: -20px -20px 20px -20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <div style="max-width: 800px; margin: 0 auto; display: flex; justify-content: center; gap: 10px;">
-            <a href="index.html" style="text-decoration: none;">
-                <button style="background-color: #3498db;">Chronomètre</button>
-            </a>
-            <a href="import.html" style="text-decoration: none;">
-                <button style="background-color: #2ecc71;">Gérer les coureurs</button>
-            </a>
-            <a href="classement.html" style="text-decoration: none;">
-                <button style="background-color: #e74c3c;">Voir le classement</button>
-            </a>
-        </div>
-    </nav>
+        <!-- Contenu principal -->
+        <main class="main-content">
+            <h1>Classement Scratch</h1>
+            <div class="ranking-container">
+                <div class="export-section">
+                    <button id="export-ranking" class="export-btn">Exporter en Excel</button>
+                </div>
 
-    <div id="ranking-container" style="max-width: 1000px; margin: 20px auto;">
-        <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <h2>Classement Scratch</h2>
-            <table id="ranking-table" style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr>
-                        <th>Position</th>
-                        <th>Dossard</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Sexe</th>
-                        <th>Année de naissance</th>
-                        <th>Temps</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+                <div class="ranking-section">
+                    <table id="ranking-table">
+                        <thead>
+                            <tr>
+                                <th>Position</th>
+                                <th>Dossard</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Sexe</th>
+                                <th>Année de naissance</th>
+                                <th>Temps</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <div style="text-align: center; margin-top: 20px;">
-        <button id="export-ranking" style="background-color: #2ecc71;">Exporter le classement en Excel</button>
-    </div>
-
-    <div style="text-align: center; margin-top: 20px;">
-        <a href="index.html" style="text-decoration: none;">
-            <button>Retour au chronomètre</button>
-        </a>
-        <a href="import.html" style="text-decoration: none;">
-            <button>Gérer les coureurs</button>
-        </a>
-    </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
     <script src="./assets/js/ranking.js"></script>
 </body>
 </html> 

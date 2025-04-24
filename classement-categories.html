@@ -9,37 +9,59 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-    <h1>Classement par Catégorie</h1>
+    <div class="app-container">
+        <!-- Barre latérale de navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Menu</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="index.html">
+                        <span class="icon">⏱️</span>
+                        <span class="text">Chronomètre</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="import.html">
+                        <span class="icon">👥</span>
+                        <span class="text">Gérer les coureurs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="classement.html">
+                        <span class="icon">🏆</span>
+                        <span class="text">Classement Scratch</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="classement-categories.html" class="active">
+                        <span class="icon">📊</span>
+                        <span class="text">Classement par Catégorie</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="parametres.html">
+                        <span class="icon">⚙️</span>
+                        <span class="text">Paramètres</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
 
-    <!-- Barre de navigation -->
-    <nav style="background-color: white; padding: 10px; margin: -20px -20px 20px -20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <div style="max-width: 800px; margin: 0 auto; display: flex; justify-content: center; gap: 10px;">
-            <a href="index.html" style="text-decoration: none;">
-                <button style="background-color: #3498db;">Chronomètre</button>
-            </a>
-            <a href="import.html" style="text-decoration: none;">
-                <button style="background-color: #2ecc71;">Gérer les coureurs</button>
-            </a>
-            <a href="classement.html" style="text-decoration: none;">
-                <button style="background-color: #e74c3c;">Classement Scratch</button>
-            </a>
-            <a href="classement-categories.html" style="text-decoration: none;">
-                <button style="background-color: #9b59b6;">Classement par Catégorie</button>
-            </a>
-            <a href="parametres.html" style="text-decoration: none;">
-                <button style="background-color: #f1c40f;">Paramètres</button>
-            </a>
-        </div>
-    </nav>
+        <!-- Contenu principal -->
+        <main class="main-content">
+            <h1>Classement par Catégorie</h1>
+            <div class="categories-ranking-container">
+                <div class="export-section">
+                    <button id="export-pdf" class="export-btn">Exporter en PDF</button>
+                </div>
 
-    <div id="categories-ranking-container" style="max-width: 1200px; margin: 20px auto;">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <button id="export-pdf" style="background-color: #2ecc71; padding: 10px 20px;">Exporter en PDF</button>
-        </div>
-
-        <div id="categories-ranking" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
-            <!-- Les classements par catégorie seront générés ici -->
-        </div>
+                <div id="categories-ranking" class="categories-grid">
+                    <!-- Les classements par catégorie seront générés ici -->
+                </div>
+            </div>
+        </main>
     </div>
 
     <script src="./assets/js/classement-categories.js"></script>
