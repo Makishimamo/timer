@@ -27,19 +27,14 @@ function recordLap() {
         alert("Veuillez démarrer le chronomètre avant d'enregistrer un LAP !");
         return;
     }
-    const dossardNumber = document.getElementById("dossard-number").value;
-    if (!dossardNumber) {
-        alert("Veuillez entrer un numéro de dossard !");
-        return;
-    }
     const lapTime = Date.now() - startTime;
     const lapData = {
         time: formatTime(lapTime),
-        dossard: dossardNumber
+        dossard: ""
     };
     laps.push(lapData);
-    displayLapTime(lapData);
-    console.log(`LAP enregistré : ${lapData.time} - Dossard: ${lapData.dossard}`);
+    displayLapTime(lapData, laps.length - 1);
+    console.log(`LAP enregistré : ${lapData.time}`);
 }
 
 /**
@@ -92,10 +87,30 @@ function padNumber(num) {
  * Affiche le temps d'un LAP dans la liste.
  * @param {string} time - Temps formaté HH:MM:SS.mmm.
  */
-function displayLapTime(lapData) {
+function displayLapTime(lapData, index) {
     const lapList = document.getElementById("laps-list");
     const lapElement = document.createElement("li");
-    lapElement.textContent = `LAP ${laps.length}: ${lapData.time} - Dossard: ${lapData.dossard}`;
+    lapElement.style.display = "flex";
+    lapElement.style.alignItems = "center";
+    lapElement.style.gap = "10px";
+    
+    const lapInfo = document.createElement("span");
+    lapInfo.textContent = `LAP ${index + 1}: ${lapData.time}`;
+    
+    const dossardInput = document.createElement("input");
+    dossardInput.type = "number";
+    dossardInput.min = "1";
+    dossardInput.placeholder = "Numéro de dossard";
+    dossardInput.style.padding = "5px";
+    dossardInput.style.width = "100px";
+    
+    dossardInput.addEventListener("change", function() {
+        laps[index].dossard = this.value;
+        console.log(`Dossard ${this.value} ajouté pour le LAP ${index + 1}`);
+    });
+    
+    lapElement.appendChild(lapInfo);
+    lapElement.appendChild(dossardInput);
     lapList.appendChild(lapElement);
 }
 
