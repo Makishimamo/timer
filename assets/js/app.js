@@ -94,7 +94,7 @@ function displayLaps() {
         lapElement.className = 'lap-item';
         lapElement.innerHTML = `
             <div class="lap-info">
-                <span class="lap-number">Tour ${index + 1}</span>
+                <span class="lap-number">LAP ${laps.length - index}</span>
                 <span class="lap-time">${lap.time}</span>
             </div>
             <div class="lap-runner">
