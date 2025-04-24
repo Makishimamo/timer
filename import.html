@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import des Coureurs</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+<body>
+    <h1>Import des Coureurs</h1>
+
+    <div id="import-container" style="max-width: 800px; margin: 20px auto;">
+        <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2>Import des données</h2>
+            <p>Vous pouvez importer un fichier Excel avec les colonnes suivantes :</p>
+            <ul>
+                <li>DOSSARD (numérique)</li>
+                <li>NOM (texte)</li>
+                <li>PRENOM (texte)</li>
+                <li>SEXE (H ou F)</li>
+                <li>ANNEE_NAISSANCE (numérique)</li>
+            </ul>
+            <input type="file" id="file-input" accept=".xlsx,.xls" style="margin: 10px 0;">
+            <button id="import-button">Importer</button>
+        </div>
+
+        <div id="runners-list" style="margin-top: 20px; background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2>Liste des coureurs</h2>
+            <table id="runners-table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th>Dossard</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Sexe</th>
+                        <th>Année de naissance</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="index.html" style="text-decoration: none;">
+            <button>Retour au chronomètre</button>
+        </a>
+        <a href="classement.html" style="text-decoration: none;">
+            <button>Voir le classement</button>
+        </a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <script src="./assets/js/import.js"></script>
+</body>
+</html> 

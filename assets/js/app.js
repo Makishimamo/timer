@@ -35,6 +35,9 @@ function recordLap() {
     laps.push(lapData);
     displayLapTime(lapData, laps.length - 1);
     console.log(`LAP enregistré : ${lapData.time}`);
+    
+    // Sauvegarde dans le localStorage
+    localStorage.setItem('laps', JSON.stringify(laps));
 }
 
 /**
@@ -154,6 +157,9 @@ function resetTimer() {
     // Réinitialiser l'affichage
     document.getElementById("timer-display").textContent = "00:00:00.00";
     document.getElementById("laps-list").innerHTML = "";
+    
+    // Supprimer les données du localStorage
+    localStorage.removeItem('laps');
     
     console.log("Application réinitialisée");
 }
