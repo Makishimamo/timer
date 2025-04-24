@@ -106,6 +106,18 @@ function displayLaps() {
         const dossardInput = lapElement.querySelector('.dossard-input');
         dossardInput.addEventListener('change', function() {
             const dossard = this.value;
+            
+            // Vérifier si le dossard est déjà utilisé dans un autre tour
+            const isDossardUsed = laps.some((otherLap, otherIndex) => 
+                otherIndex !== index && otherLap.dossard === dossard
+            );
+
+            if (isDossardUsed) {
+                alert('Ce dossard a déjà été utilisé pour un autre tour');
+                this.value = '';
+                return;
+            }
+
             const runners = JSON.parse(localStorage.getItem('runners') || '[]');
             const runner = runners.find(r => r.dossard == dossard);
 
