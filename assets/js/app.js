@@ -9,11 +9,11 @@ let isRunning = false;
  */
 function startTimer() {
     if (isRunning) {
-        console.warn("Le chronomètre est déjà en cours !");
+        console.error("Le chronomètre est déjà en cours !");
         return;
     }
     startTime = Date.now();
-    timerInterval = setInterval(updateTimerDisplay, 1000);
+    timerInterval = setInterval(updateTimerDisplay, 10); // Mise à jour toutes les 10ms pour plus de précision
     isRunning = true;
     console.log("La course a commencé !");
 }
@@ -28,10 +28,9 @@ function recordLap() {
         return;
     }
     const lapTime = Date.now() - startTime;
-    const formattedTime = formatTime(lapTime);
-    laps.push(formattedTime);
-    displayLapTime(formattedTime);
-    console.log(`LAP enregistré : ${formattedTime}`);
+    laps.push(formatTime(lapTime));
+    displayLapTime(formatTime(lapTime));
+    console.log(`LAP enregistré : ${formatTime(lapTime)}`);
 }
 
 /**
@@ -39,7 +38,8 @@ function recordLap() {
  */
 function stopTimer() {
     if (!isRunning) {
-        console.warn("Le chronomètre n'est pas en cours !");
+        console.error("Le chronomètre n'est pas en cours !");
+        alert("Le chronomètre n'a pas été démarré !");
         return;
     }
     clearInterval(timerInterval);
@@ -49,19 +49,7 @@ function stopTimer() {
 }
 
 /**
- * Réinitialise le chronomètre.
- */
-function resetTimer() {
-    stopTimer();
-    startTime = null;
-    laps = [];
-    document.getElementById("timer-display").textContent = "00:00:00";
-    document.getElementById("laps-list").innerHTML = "";
-    console.log("Le chronomètre a été réinitialisé !");
-}
-
-/**
- * Met à jour l'affichage du chronomètre au format HH:MM:SS.
+ * Met à jour l'affichage du chronomètre au format HH:MM:SS.mmm.
  */
 function updateTimerDisplay() {
     const timerDisplay = document.getElementById("timer-display");
@@ -70,7 +58,7 @@ function updateTimerDisplay() {
 }
 
 /**
- * Formate le temps en HH:MM:SS.
+ * Formate le temps en HH:MM:SS.mmm.
  * @param {number} time - Temps en millisecondes.
  * @returns {string} - Temps formaté.
  */
@@ -78,7 +66,8 @@ function formatTime(time) {
     const hours = Math.floor(time / (1000 * 60 * 60));
     const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((time % (1000 * 60)) / 1000);
-    return `${padNumber(hours)}:${padNumber(minutes)}:${padNumber(seconds)}`;
+    const milliseconds = Math.floor((time % 1000) / 10);
+    return `${padNumber(hours)}:${padNumber(minutes)}:${padNumber(seconds)}.${padNumber(milliseconds)}`;
 }
 
 /**
@@ -92,20 +81,19 @@ function padNumber(num) {
 
 /**
  * Affiche le temps d'un LAP dans la liste.
- * @param {string} time - Temps formaté HH:MM:SS.
+ * @param {string} time - Temps formaté HH:MM:SS.mmm.
  */
 function displayLapTime(time) {
     const lapList = document.getElementById("laps-list");
     const lapElement = document.createElement("li");
-    lapElement.textContent = `LAP: ${time}`;
+    lapElement.textContent = `LAP ${laps.length}: ${time}`;
     lapList.appendChild(lapElement);
 }
 
 /**
  * Exporte les temps des LAPs dans un fichier Excel.
- * @param {Array<string>} laps - Liste des temps des LAPs.
  */
-function exportToExcel(laps) {
+function exportToExcel() {
     if (laps.length === 0) {
         alert("Aucun temps enregistré à exporter !");
         return;
@@ -113,14 +101,14 @@ function exportToExcel(laps) {
 
     const data = laps.map((lap, index) => ({
         "Numéro du LAP": index + 1,
-        "Temps (HH:MM:SS)": lap,
+        "Temps (HH:MM:SS.mmm)": lap,
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Temps LAPs");
 
-    const excelFileName = "laps_temps.xlsx";
+    const excelFileName = `laps_temps_${new Date().toISOString().slice(0,10)}.xlsx`;
     XLSX.writeFile(workbook, excelFileName);
 
     console.log(`Fichier Excel exporté : ${excelFileName}`);
@@ -130,22 +118,10 @@ function exportToExcel(laps) {
  * Initialisation des événements.
  */
 function initializeEventListeners() {
-    const startButton = document.getElementById("start-timer");
-    const lapButton = document.getElementById("lap-timer");
-    const stopButton = document.getElementById("stop-timer");
-    const resetButton = document.getElementById("reset-timer");
-    const exportButton = document.getElementById("export-button");
-
-    if (!startButton || !lapButton || !stopButton || !resetButton || !exportButton) {
-        console.error("Un ou plusieurs boutons sont manquants dans le HTML !");
-        return;
-    }
-
-    startButton.addEventListener("click", startTimer);
-    lapButton.addEventListener("click", recordLap);
-    stopButton.addEventListener("click", stopTimer);
-    resetButton.addEventListener("click", resetTimer);
-    exportButton.addEventListener("click", () => exportToExcel(laps));
+    document.getElementById("start-timer").addEventListener("click", startTimer);
+    document.getElementById("lap-timer").addEventListener("click", recordLap);
+    document.getElementById("stop-timer").addEventListener("click", stopTimer);
+    document.getElementById("export-button").addEventListener("click", exportToExcel);
 }
 
 // Initialisation des événements au chargement de la page
