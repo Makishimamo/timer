@@ -1,66 +1,69 @@
 // Variables globales
-let startTime = null;
-let timerInterval = null;
-let laps = [];
+let startTime;
+let elapsedTime = 0;
+let timerInterval;
 let isRunning = false;
+let laps = [];
+
+// Éléments du DOM
+const timerDisplay = document.getElementById('timer');
+const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
+const resetBtn = document.getElementById('resetBtn');
+const lapsList = document.getElementById('lapsList');
 
 /**
  * Démarre le chronomètre.
  */
 function startTimer() {
-    if (isRunning) {
-        console.error("Le chronomètre est déjà en cours !");
-        return;
+    if (!isRunning) {
+        startTime = Date.now() - elapsedTime;
+        timerInterval = setInterval(updateTimer, 10);
+        isRunning = true;
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        console.log("La course a commencé !");
     }
-    startTime = Date.now();
-    timerInterval = setInterval(updateTimerDisplay, 10); // Mise à jour toutes les 10ms pour plus de précision
-    isRunning = true;
-    console.log("La course a commencé !");
 }
 
 /**
  * Enregistre un LAP.
  */
 function recordLap() {
-    if (!isRunning) {
-        console.error("Le chronomètre n'a pas été démarré !");
-        alert("Veuillez démarrer le chronomètre avant d'enregistrer un LAP !");
-        return;
+    if (isRunning) {
+        const lapTime = formatTime(elapsedTime);
+        laps.unshift({
+            time: lapTime,
+            dossard: '',
+            runnerInfo: null
+        });
+        displayLaps();
+        console.log(`LAP enregistré : ${lapTime}`);
+        
+        // Sauvegarde dans le localStorage
+        localStorage.setItem('laps', JSON.stringify(laps));
     }
-    const lapTime = Date.now() - startTime;
-    const lapData = {
-        time: formatTime(lapTime),
-        dossard: ""
-    };
-    laps.push(lapData);
-    displayLapTime(lapData, laps.length - 1);
-    console.log(`LAP enregistré : ${lapData.time}`);
-    
-    // Sauvegarde dans le localStorage
-    localStorage.setItem('laps', JSON.stringify(laps));
 }
 
 /**
  * Arrête le chronomètre.
  */
 function stopTimer() {
-    if (!isRunning) {
-        console.error("Le chronomètre n'est pas en cours !");
-        alert("Le chronomètre n'a pas été démarré !");
-        return;
+    if (isRunning) {
+        clearInterval(timerInterval);
+        isRunning = false;
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        console.log("La course est arrêtée !");
     }
-    clearInterval(timerInterval);
-    timerInterval = null;
-    isRunning = false;
-    console.log("La course est arrêtée !");
 }
 
 /**
  * Met à jour l'affichage du chronomètre au format HH:MM:SS.mmm.
  */
-function updateTimerDisplay() {
-    const timerDisplay = document.getElementById("timer-display");
-    const elapsedTime = Date.now() - startTime;
+function updateTimer() {
+    const currentTime = Date.now();
+    elapsedTime = currentTime - startTime;
     timerDisplay.textContent = formatTime(elapsedTime);
 }
 
@@ -69,72 +72,54 @@ function updateTimerDisplay() {
  * @param {number} time - Temps en millisecondes.
  * @returns {string} - Temps formaté.
  */
-function formatTime(time) {
-    const hours = Math.floor(time / (1000 * 60 * 60));
-    const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((time % (1000 * 60)) / 1000);
-    const milliseconds = Math.floor((time % 1000) / 10);
-    return `${padNumber(hours)}:${padNumber(minutes)}:${padNumber(seconds)}.${padNumber(milliseconds)}`;
+function formatTime(ms) {
+    const date = new Date(ms);
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+    const milliseconds = date.getUTCMilliseconds().toString().padStart(3, '0');
+    return `${hours}:${minutes}:${seconds}.${milliseconds}`;
 }
 
 /**
- * Ajoute un zéro devant les nombres inférieurs à 10.
- * @param {number} num - Le nombre à formater.
- * @returns {string} - Nombre formaté avec un zéro devant si nécessaire.
+ * Affiche les LAPs dans la liste.
  */
-function padNumber(num) {
-    return num < 10 ? `0${num}` : `${num}`;
-}
+function displayLaps() {
+    lapsList.innerHTML = '';
+    laps.forEach((lap, index) => {
+        const lapElement = document.createElement('div');
+        lapElement.className = 'lap-item';
+        lapElement.innerHTML = `
+            <div class="lap-info">
+                <span class="lap-number">Tour ${index + 1}</span>
+                <span class="lap-time">${lap.time}</span>
+            </div>
+            <div class="lap-runner">
+                <input type="text" class="dossard-input" placeholder="N° dossard" value="${lap.dossard}">
+                ${lap.runnerInfo ? `
+                    <span class="runner-name">${lap.runnerInfo.nom} ${lap.runnerInfo.prenom}</span>
+                ` : ''}
+            </div>
+        `;
 
-/**
- * Affiche le temps d'un LAP dans la liste.
- * @param {string} time - Temps formaté HH:MM:SS.mmm.
- */
-function displayLapTime(lapData, index) {
-    const lapList = document.getElementById("laps-list");
-    const lapElement = document.createElement("li");
-    lapElement.style.display = "flex";
-    lapElement.style.alignItems = "center";
-    lapElement.style.gap = "10px";
-    
-    const lapInfo = document.createElement("span");
-    lapInfo.textContent = `LAP ${index + 1}: ${lapData.time}`;
-    
-    const dossardInput = document.createElement("input");
-    dossardInput.type = "number";
-    dossardInput.min = "1";
-    dossardInput.placeholder = "Numéro de dossard";
-    dossardInput.style.padding = "5px";
-    dossardInput.style.width = "100px";
-    
-    dossardInput.addEventListener("change", function() {
-        const dossardNumber = this.value;
-        const runners = JSON.parse(localStorage.getItem('runners') || '[]');
-        const runner = runners.find(r => r.dossard == dossardNumber);
-        
-        if (runner) {
-            // Mise à jour des données du LAP
-            laps[index].dossard = dossardNumber;
-            laps[index].runnerInfo = {
-                nom: runner.nom,
-                prenom: runner.prenom,
-                sexe: runner.sexe,
-                anneeNaissance: runner.anneeNaissance
-            };
-            
-            // Sauvegarde dans le localStorage
-            localStorage.setItem('laps', JSON.stringify(laps));
-            
-            console.log(`Dossard ${dossardNumber} ajouté pour le LAP ${index + 1}`);
-        } else {
-            alert("Ce numéro de dossard n'existe pas dans la liste des coureurs !");
-            this.value = "";
-        }
+        const dossardInput = lapElement.querySelector('.dossard-input');
+        dossardInput.addEventListener('change', function() {
+            const dossard = this.value;
+            const runners = JSON.parse(localStorage.getItem('runners') || '[]');
+            const runner = runners.find(r => r.dossard == dossard);
+
+            if (runner) {
+                lap.dossard = dossard;
+                lap.runnerInfo = runner;
+                displayLaps();
+            } else {
+                alert('Dossard non trouvé');
+                this.value = '';
+            }
+        });
+
+        lapsList.appendChild(lapElement);
     });
-    
-    lapElement.appendChild(lapInfo);
-    lapElement.appendChild(dossardInput);
-    lapList.appendChild(lapElement);
 }
 
 /**
@@ -166,17 +151,11 @@ function exportToExcel() {
  * Réinitialise l'application.
  */
 function resetTimer() {
-    if (isRunning) {
-        stopTimer();
-    }
-    startTime = null;
-    timerInterval = null;
+    stopTimer();
+    elapsedTime = 0;
+    timerDisplay.textContent = formatTime(0);
     laps = [];
-    isRunning = false;
-    
-    // Réinitialiser l'affichage
-    document.getElementById("timer-display").textContent = "00:00:00.00";
-    document.getElementById("laps-list").innerHTML = "";
+    displayLaps();
     
     // Supprimer les données du localStorage
     localStorage.removeItem('laps');
@@ -188,12 +167,34 @@ function resetTimer() {
  * Initialisation des événements.
  */
 function initializeEventListeners() {
-    document.getElementById("start-timer").addEventListener("click", startTimer);
-    document.getElementById("lap-timer").addEventListener("click", recordLap);
-    document.getElementById("stop-timer").addEventListener("click", stopTimer);
+    startBtn.addEventListener('click', startTimer);
+    stopBtn.addEventListener('click', stopTimer);
+    resetBtn.addEventListener('click', resetTimer);
     document.getElementById("export-button").addEventListener("click", exportToExcel);
-    document.getElementById("reset-timer").addEventListener("click", resetTimer);
 }
 
 // Initialisation des événements au chargement de la page
 document.addEventListener("DOMContentLoaded", initializeEventListeners);
+
+// Touche espace pour démarrer/arrêter
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        e.preventDefault();
+        if (isRunning) {
+            stopTimer();
+        } else {
+            startTimer();
+        }
+    }
+});
+
+// Touche L pour enregistrer un tour
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'KeyL' && isRunning) {
+        e.preventDefault();
+        recordLap();
+    }
+});
+
+// Initialisation
+resetTimer();

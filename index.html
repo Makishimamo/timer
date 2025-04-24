@@ -3,49 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timer de Course</title>
+    <title>Chronomètre</title>
     <link rel="stylesheet" href="./assets/css/styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
 </head>
 <body>
-    <h1>Timer de Course</h1>
+    <div class="app-container">
+        <!-- Barre latérale de navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Menu</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="index.html" class="active">
+                        <span class="icon">⏱️</span>
+                        <span class="text">Chronomètre</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="import.html">
+                        <span class="icon">👥</span>
+                        <span class="text">Gérer les coureurs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="classement.html">
+                        <span class="icon">🏆</span>
+                        <span class="text">Classement Scratch</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="classement-categories.html">
+                        <span class="icon">📊</span>
+                        <span class="text">Classement par Catégorie</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="parametres.html">
+                        <span class="icon">⚙️</span>
+                        <span class="text">Paramètres</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
 
-    <!-- Barre de navigation -->
-    <nav style="background-color: white; padding: 10px; margin: -20px -20px 20px -20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <div style="max-width: 800px; margin: 0 auto; display: flex; justify-content: center; gap: 10px;">
-            <a href="index.html" style="text-decoration: none;">
-                <button style="background-color: #3498db;">Chronomètre</button>
-            </a>
-            <a href="import.html" style="text-decoration: none;">
-                <button style="background-color: #2ecc71;">Gérer les coureurs</button>
-            </a>
-            <a href="classement.html" style="text-decoration: none;">
-                <button style="background-color: #e74c3c;">Voir le classement</button>
-            </a>
-        </div>
-    </nav>
+        <!-- Contenu principal -->
+        <main class="main-content">
+            <h1>Chronomètre</h1>
+            <div class="timer-container">
+                <div class="timer-display" id="timer">00:00:00.000</div>
+                <div class="timer-controls">
+                    <button id="startBtn" class="timer-btn">Démarrer</button>
+                    <button id="stopBtn" class="timer-btn" disabled>Arrêter</button>
+                    <button id="resetBtn" class="timer-btn">Réinitialiser</button>
+                </div>
+            </div>
 
-    <!-- Boutons pour le chronomètre -->
-    <div id="controls-container">
-        <button id="start-timer">Lancer la course</button>
-        <button id="lap-timer">Enregistrer un LAP</button>
-        <button id="stop-timer">Arrêter la course</button>
-        <button id="reset-timer" style="background-color: #e74c3c;">Réinitialiser</button>
+            <div class="laps-container">
+                <h2>Tours</h2>
+                <div class="laps-list" id="lapsList"></div>
+            </div>
+        </main>
     </div>
 
-    <!-- Section du chronomètre -->
-    <div id="timer-container">
-        <h2>Chronomètre :</h2>
-        <p id="timer-display">00:00:00</p>
-    </div>
-
-    <!-- Section pour les temps des LAPs -->
-    <div id="laps-container">
-        <h2>Temps des LAPs :</h2>
-        <ul id="laps-list"></ul>
-    </div>
-
-    <!-- Lien vers le fichier JS -->
     <script src="./assets/js/app.js"></script>
 </body>
 </html>
