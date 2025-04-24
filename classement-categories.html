@@ -4,66 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classement par Catégorie</title>
-    <link rel="stylesheet" href="./assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Barre latérale de navigation -->
-        <nav class="sidebar">
-            <div class="sidebar-header">
-                <h2>Menu</h2>
-            </div>
-            <ul class="sidebar-menu">
-                <li>
-                    <a href="index.html">
-                        <span class="icon">⏱️</span>
-                        <span class="text">Chronomètre</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="import.html">
-                        <span class="icon">👥</span>
-                        <span class="text">Gérer les coureurs</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="classement.html">
-                        <span class="icon">🏆</span>
-                        <span class="text">Classement Scratch</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="classement-categories.html" class="active">
-                        <span class="icon">📊</span>
-                        <span class="text">Classement par Catégorie</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="parametres.html">
-                        <span class="icon">⚙️</span>
-                        <span class="text">Paramètres</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+    <header>
+        <h1>Classement par Catégorie</h1>
+    </header>
 
-        <!-- Contenu principal -->
-        <main class="main-content">
-            <h1>Classement par Catégorie</h1>
-            <div class="categories-ranking-container">
-                <div class="export-section">
-                    <button id="export-pdf" class="export-btn">Exporter en PDF</button>
-                </div>
+    <nav>
+        <a href="index.html" class="nav-btn blue">Chronomètre</a>
+        <a href="import.html" class="nav-btn green">Gérer les coureurs</a>
+        <a href="classement.html" class="nav-btn red">Classement Scratch</a>
+        <a href="classement-categories.html" class="nav-btn purple">Classement par Catégorie</a>
+        <a href="parametres.html" class="nav-btn orange">Paramètres</a>
+    </nav>
 
-                <div id="categories-ranking" class="categories-grid">
-                    <!-- Les classements par catégorie seront générés ici -->
-                </div>
+    <div class="container">
+        <button id="export-pdf" class="export-btn">Exporter en PDF</button>
+        
+        <div class="categories-grid">
+            <div class="gender-section">
+                <h2>Hommes</h2>
+                <div id="male-categories" class="categories-container"></div>
             </div>
-        </main>
+            
+            <div class="gender-section">
+                <h2>Femmes</h2>
+                <div id="female-categories" class="categories-container"></div>
+            </div>
+        </div>
     </div>
 
-    <script src="./assets/js/classement-categories.js"></script>
+    <script src="assets/js/classement-categories.js"></script>
 </body>
 </html> 

@@ -433,3 +433,74 @@ tr:nth-child(even) {
         font-size: 12px;
     }
 }
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.gender-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.gender-section h2 {
+    color: #2c3e50;
+    margin-top: 0;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #3498db;
+}
+
+.gender-section:nth-child(2) h2 {
+    border-bottom-color: #e74c3c;
+}
+
+.category-ranking {
+    margin-bottom: 2rem;
+}
+
+.category-ranking h3 {
+    color: #9b59b6;
+    margin: 1rem 0;
+}
+
+.category-ranking table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.category-ranking th {
+    background-color: #9b59b6;
+    color: white;
+    padding: 0.75rem;
+    text-align: center;
+}
+
+.category-ranking td {
+    padding: 0.75rem;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.category-ranking tr.podium:nth-child(1) {
+    background-color: #ffd700;
+}
+
+.category-ranking tr.podium:nth-child(2) {
+    background-color: #c0c0c0;
+}
+
+.category-ranking tr.podium:nth-child(3) {
+    background-color: #cd7f32;
+}
+
+@media (max-width: 768px) {
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+}

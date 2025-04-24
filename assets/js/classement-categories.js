@@ -17,73 +17,88 @@ function getRunnerCategory(runner, categories) {
 /**
  * Affiche le classement par catégorie
  */
-function displayCategoriesRanking() {
-    const container = document.getElementById('categories-ranking');
-    container.innerHTML = '';
+function displayCategoryRankings() {
+    const maleCategoriesContainer = document.getElementById('male-categories');
+    const femaleCategoriesContainer = document.getElementById('female-categories');
+    maleCategoriesContainer.innerHTML = '';
+    femaleCategoriesContainer.innerHTML = '';
 
-    const categories = JSON.parse(localStorage.getItem('categories') || '[]');
-    const runners = JSON.parse(localStorage.getItem('runners') || '[]');
     const laps = JSON.parse(localStorage.getItem('laps') || '[]');
+    const categories = JSON.parse(localStorage.getItem('categories') || '[]');
 
-    // Création des classements par catégorie
+    // Filtrer les tours avec dossard et info coureur
+    const validLaps = laps.filter(lap => lap.dossard && lap.runnerInfo);
+
     categories.forEach(category => {
-        // Filtrage des coureurs de la catégorie
-        const categoryRunners = runners.filter(runner => {
-            const age = calculateAge(runner.anneeNaissance);
-            return age >= category.minAge && age <= category.maxAge;
+        // Filtrer les tours par catégorie et par sexe
+        const maleLaps = validLaps.filter(lap => {
+            const age = new Date().getFullYear() - lap.runnerInfo.anneeNaissance;
+            return lap.runnerInfo.sexe === 'M' && 
+                   age >= category.ageMin && 
+                   age <= category.ageMax;
         });
 
-        // Création du classement
-        const ranking = laps
-            .filter(lap => categoryRunners.some(runner => runner.dossard == lap.dossard))
-            .map(lap => {
-                const runner = runners.find(r => r.dossard == lap.dossard);
-                return {
-                    dossard: lap.dossard,
-                    nom: runner.nom,
-                    prenom: runner.prenom,
-                    temps: lap.time
-                };
-            })
-            .sort((a, b) => convertTimeToMs(a.temps) - convertTimeToMs(b.temps))
-            .slice(0, 3); // Garder seulement les 3 premiers
+        const femaleLaps = validLaps.filter(lap => {
+            const age = new Date().getFullYear() - lap.runnerInfo.anneeNaissance;
+            return lap.runnerInfo.sexe === 'F' && 
+                   age >= category.ageMin && 
+                   age <= category.ageMax;
+        });
 
-        // Création de la carte de classement
-        const categoryCard = document.createElement('div');
-        categoryCard.style.background = 'white';
-        categoryCard.style.padding = '20px';
-        categoryCard.style.borderRadius = '8px';
-        categoryCard.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-        categoryCard.className = 'category-card';
+        // Créer les tableaux de classement pour chaque sexe
+        const maleRanking = createCategoryTable(category, maleLaps);
+        const femaleRanking = createCategoryTable(category, femaleLaps);
 
-        categoryCard.innerHTML = `
-            <h2 style="text-align: center; margin-top: 0; color: #9b59b6;">${category.name}</h2>
-            <table style="width: 100%;">
-                <thead>
-                    <tr>
-                        <th>Position</th>
-                        <th>Dossard</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Temps</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${ranking.map((runner, index) => `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${runner.dossard}</td>
-                            <td>${runner.nom}</td>
-                            <td>${runner.prenom}</td>
-                            <td>${runner.temps}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        `;
-
-        container.appendChild(categoryCard);
+        // Ajouter les classements aux conteneurs respectifs
+        if (maleLaps.length > 0) {
+            maleCategoriesContainer.appendChild(maleRanking);
+        }
+        if (femaleLaps.length > 0) {
+            femaleCategoriesContainer.appendChild(femaleRanking);
+        }
     });
+}
+
+function createCategoryTable(category, laps) {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.className = 'category-ranking';
+    
+    const categoryTitle = document.createElement('h3');
+    categoryTitle.textContent = category.nom;
+    categoryDiv.appendChild(categoryTitle);
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Position</th>
+                <th>Dossard</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Temps</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${laps
+                .sort((a, b) => {
+                    const timeA = convertTimeToMilliseconds(a.time);
+                    const timeB = convertTimeToMilliseconds(b.time);
+                    return timeA - timeB;
+                })
+                .map((lap, index) => `
+                    <tr class="${index < 3 ? 'podium' : ''}">
+                        <td>${index + 1}</td>
+                        <td>${lap.dossard}</td>
+                        <td>${lap.runnerInfo.nom}</td>
+                        <td>${lap.runnerInfo.prenom}</td>
+                        <td>${lap.time}</td>
+                    </tr>
+                `).join('')}
+        </tbody>
+    `;
+    
+    categoryDiv.appendChild(table);
+    return categoryDiv;
 }
 
 /**
@@ -129,9 +144,9 @@ function convertTimeToMs(time) {
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', function() {
-    displayCategoriesRanking();
+    displayCategoryRankings();
     document.getElementById('export-pdf').addEventListener('click', exportToPDF);
     
     // Mise à jour toutes les secondes
-    setInterval(displayCategoriesRanking, 1000);
+    setInterval(displayCategoryRankings, 1000);
 }); 
