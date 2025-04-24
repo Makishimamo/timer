@@ -34,20 +34,20 @@ function displayCategoryRankings() {
         const maleLaps = validLaps.filter(lap => {
             const age = new Date().getFullYear() - lap.runnerInfo.anneeNaissance;
             return lap.runnerInfo.sexe === 'M' && 
-                   age >= category.ageMin && 
-                   age <= category.ageMax;
+                   age >= category.minAge && 
+                   age <= category.maxAge;
         });
 
         const femaleLaps = validLaps.filter(lap => {
             const age = new Date().getFullYear() - lap.runnerInfo.anneeNaissance;
             return lap.runnerInfo.sexe === 'F' && 
-                   age >= category.ageMin && 
-                   age <= category.ageMax;
+                   age >= category.minAge && 
+                   age <= category.maxAge;
         });
 
         // Créer les tableaux de classement pour chaque sexe
-        const maleRanking = createCategoryTable(category, maleLaps);
-        const femaleRanking = createCategoryTable(category, femaleLaps);
+        const maleRanking = createCategoryTable(category.name, maleLaps);
+        const femaleRanking = createCategoryTable(category.name, femaleLaps);
 
         // Ajouter les classements aux conteneurs respectifs
         if (maleLaps.length > 0) {
@@ -59,13 +59,22 @@ function displayCategoryRankings() {
     });
 }
 
-function createCategoryTable(category, laps) {
+function createCategoryTable(categoryName, laps) {
     const categoryDiv = document.createElement('div');
     categoryDiv.className = 'category-ranking';
     
     const categoryTitle = document.createElement('h3');
-    categoryTitle.textContent = category.nom;
+    categoryTitle.textContent = categoryName;
     categoryDiv.appendChild(categoryTitle);
+
+    // Trier les tours par temps et prendre les 3 premiers
+    const topThreeLaps = laps
+        .sort((a, b) => {
+            const timeA = convertTimeToMs(a.time);
+            const timeB = convertTimeToMs(b.time);
+            return timeA - timeB;
+        })
+        .slice(0, 3);
 
     const table = document.createElement('table');
     table.innerHTML = `
@@ -79,21 +88,15 @@ function createCategoryTable(category, laps) {
             </tr>
         </thead>
         <tbody>
-            ${laps
-                .sort((a, b) => {
-                    const timeA = convertTimeToMilliseconds(a.time);
-                    const timeB = convertTimeToMilliseconds(b.time);
-                    return timeA - timeB;
-                })
-                .map((lap, index) => `
-                    <tr class="${index < 3 ? 'podium' : ''}">
-                        <td>${index + 1}</td>
-                        <td>${lap.dossard}</td>
-                        <td>${lap.runnerInfo.nom}</td>
-                        <td>${lap.runnerInfo.prenom}</td>
-                        <td>${lap.time}</td>
-                    </tr>
-                `).join('')}
+            ${topThreeLaps.map((lap, index) => `
+                <tr class="${index < 3 ? 'podium' : ''}">
+                    <td>${index + 1}</td>
+                    <td>${lap.dossard}</td>
+                    <td>${lap.runnerInfo.nom}</td>
+                    <td>${lap.runnerInfo.prenom}</td>
+                    <td>${lap.time}</td>
+                </tr>
+            `).join('')}
         </tbody>
     `;
     
