@@ -140,6 +140,25 @@ function exportToExcel() {
 }
 
 /**
+ * Réinitialise l'application.
+ */
+function resetTimer() {
+    if (isRunning) {
+        stopTimer();
+    }
+    startTime = null;
+    timerInterval = null;
+    laps = [];
+    isRunning = false;
+    
+    // Réinitialiser l'affichage
+    document.getElementById("timer-display").textContent = "00:00:00.00";
+    document.getElementById("laps-list").innerHTML = "";
+    
+    console.log("Application réinitialisée");
+}
+
+/**
  * Initialisation des événements.
  */
 function initializeEventListeners() {
@@ -147,6 +166,7 @@ function initializeEventListeners() {
     document.getElementById("lap-timer").addEventListener("click", recordLap);
     document.getElementById("stop-timer").addEventListener("click", stopTimer);
     document.getElementById("export-button").addEventListener("click", exportToExcel);
+    document.getElementById("reset-timer").addEventListener("click", resetTimer);
 }
 
 // Initialisation des événements au chargement de la page
