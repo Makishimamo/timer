@@ -8,6 +8,7 @@ let laps = [];
 // Éléments du DOM
 const timerDisplay = document.getElementById('timer');
 const startBtn = document.getElementById('startBtn');
+const lapBtn = document.getElementById('lapBtn');
 const stopBtn = document.getElementById('stopBtn');
 const resetBtn = document.getElementById('resetBtn');
 const lapsList = document.getElementById('lapsList');
@@ -22,6 +23,7 @@ function startTimer() {
         isRunning = true;
         startBtn.disabled = true;
         stopBtn.disabled = false;
+        lapBtn.disabled = false;
         console.log("La course a commencé !");
     }
 }
@@ -54,6 +56,7 @@ function stopTimer() {
         isRunning = false;
         startBtn.disabled = false;
         stopBtn.disabled = true;
+        lapBtn.disabled = true;
         console.log("La course est arrêtée !");
     }
 }
@@ -112,6 +115,7 @@ function displayLaps() {
                 lap.dossard = dossard;
                 lap.runnerInfo = runner;
                 displayLaps();
+                localStorage.setItem('laps', JSON.stringify(laps));
             } else {
                 alert('Dossard non trouvé');
                 this.value = '';
@@ -168,33 +172,34 @@ function resetTimer() {
  */
 function initializeEventListeners() {
     startBtn.addEventListener('click', startTimer);
+    lapBtn.addEventListener('click', recordLap);
     stopBtn.addEventListener('click', stopTimer);
     resetBtn.addEventListener('click', resetTimer);
     document.getElementById("export-button").addEventListener("click", exportToExcel);
+
+    // Touche espace pour démarrer/arrêter
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+            e.preventDefault();
+            if (isRunning) {
+                stopTimer();
+            } else {
+                startTimer();
+            }
+        }
+    });
+
+    // Touche L pour enregistrer un tour
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'KeyL' && isRunning) {
+            e.preventDefault();
+            recordLap();
+        }
+    });
 }
 
 // Initialisation des événements au chargement de la page
 document.addEventListener("DOMContentLoaded", initializeEventListeners);
-
-// Touche espace pour démarrer/arrêter
-document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') {
-        e.preventDefault();
-        if (isRunning) {
-            stopTimer();
-        } else {
-            startTimer();
-        }
-    }
-});
-
-// Touche L pour enregistrer un tour
-document.addEventListener('keydown', (e) => {
-    if (e.code === 'KeyL' && isRunning) {
-        e.preventDefault();
-        recordLap();
-    }
-});
 
 // Initialisation
 resetTimer();

@@ -1,13 +1,11 @@
-// Stockage des coureurs
-let runners = [];
+// Éléments du DOM
+const fileInput = document.getElementById('fileInput');
+const importBtn = document.getElementById('importBtn');
+const runnersTable = document.getElementById('runners-table').getElementsByTagName('tbody')[0];
 
-/**
- * Gère l'import du fichier Excel
- */
-document.getElementById('import-button').addEventListener('click', function() {
-    const fileInput = document.getElementById('file-input');
+// Fonction pour importer les données Excel
+function importExcelData() {
     const file = fileInput.files[0];
-    
     if (!file) {
         alert('Veuillez sélectionner un fichier Excel');
         return;
@@ -16,63 +14,68 @@ document.getElementById('import-button').addEventListener('click', function() {
     const reader = new FileReader();
     reader.onload = function(e) {
         const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, {type: 'array'});
+        const workbook = XLSX.read(data, { type: 'array' });
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = XLSX.utils.sheet_to_json(firstSheet);
 
         // Vérification des colonnes requises
         const requiredColumns = ['DOSSARD', 'NOM', 'PRENOM', 'SEXE', 'ANNEE_NAISSANCE'];
-        const columns = Object.keys(jsonData[0] || {});
-        
-        if (!requiredColumns.every(col => columns.includes(col))) {
-            alert('Le fichier doit contenir les colonnes suivantes : DOSSARD, NOM, PRENOM, SEXE, ANNEE_NAISSANCE');
+        const headers = Object.keys(jsonData[0] || {});
+        const missingColumns = requiredColumns.filter(col => !headers.includes(col));
+
+        if (missingColumns.length > 0) {
+            alert(`Colonnes manquantes : ${missingColumns.join(', ')}`);
             return;
         }
 
-        // Stockage des données
-        runners = jsonData.map(runner => ({
-            dossard: runner.DOSSARD,
-            nom: runner.NOM,
-            prenom: runner.PRENOM,
-            sexe: runner.SEXE,
-            anneeNaissance: runner.ANNEE_NAISSANCE
+        // Traitement des données
+        const runners = jsonData.map(row => ({
+            dossard: row.DOSSARD.toString(),
+            nom: row.NOM,
+            prenom: row.PRENOM,
+            sexe: row.SEXE,
+            anneeNaissance: row.ANNEE_NAISSANCE
         }));
 
         // Sauvegarde dans le localStorage
         localStorage.setItem('runners', JSON.stringify(runners));
-
+        
         // Affichage des données
-        displayRunners();
-        alert('Import réussi !');
+        displayRunners(runners);
+        
+        alert('Importation réussie !');
     };
     reader.readAsArrayBuffer(file);
-});
+}
 
-/**
- * Affiche la liste des coureurs
- */
-function displayRunners() {
-    const tbody = document.querySelector('#runners-table tbody');
-    tbody.innerHTML = '';
-
+// Fonction pour afficher les coureurs dans le tableau
+function displayRunners(runners) {
+    runnersTable.innerHTML = '';
     runners.forEach(runner => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
+        const row = runnersTable.insertRow();
+        row.innerHTML = `
             <td>${runner.dossard}</td>
             <td>${runner.nom}</td>
             <td>${runner.prenom}</td>
             <td>${runner.sexe}</td>
             <td>${runner.anneeNaissance}</td>
         `;
-        tbody.appendChild(tr);
     });
 }
 
-// Chargement des données au démarrage
+// Chargement des coureurs existants
+function loadExistingRunners() {
+    const runners = JSON.parse(localStorage.getItem('runners') || '[]');
+    displayRunners(runners);
+}
+
+// Initialisation des événements
+function initializeEventListeners() {
+    importBtn.addEventListener('click', importExcelData);
+}
+
+// Initialisation
 document.addEventListener('DOMContentLoaded', function() {
-    const savedRunners = localStorage.getItem('runners');
-    if (savedRunners) {
-        runners = JSON.parse(savedRunners);
-        displayRunners();
-    }
+    initializeEventListeners();
+    loadExistingRunners();
 }); 
