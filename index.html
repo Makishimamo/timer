@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer de Course</title>
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <h1>Timer de Course</h1>
+
+    <!-- Boutons pour le chronomètre -->
+    <div id="controls-container">
+        <button id="start-timer">Lancer la course</button>
+        <button id="lap-timer">Enregistrer un LAP</button>
+        <button id="stop-timer">Arrêter la course</button>
+    </div>
+
+    <!-- Section du chronomètre -->
+    <div id="timer-container">
+        <h2>Chronomètre :</h2>
+        <p id="timer-display">00:00:00</p>
+    </div>
+
+    <!-- Section pour les temps des LAPs -->
+    <div id="laps-container">
+        <h2>Temps des LAPs :</h2>
+        <ul id="laps-list"></ul>
+    </div>
+
+    <!-- Bouton pour exporter les temps en Excel -->
+    <button id="export-button" style="margin-top: 20px;">Exporter les temps en Excel</button>
+
+    <!-- Lien vers le fichier JS -->
+    <script src="./assets/js/app.js"></script>
+</body>
+</html>
