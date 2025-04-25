@@ -30,6 +30,7 @@ function displayRanking() {
     // Affichage
     ranking.forEach((runner, index) => {
         const tr = document.createElement('tr');
+        tr.setAttribute('data-sexe', runner.sexe);
         tr.innerHTML = `
             <td>${index + 1}</td>
             <td>${runner.dossard}</td>
@@ -51,9 +52,6 @@ function convertTimeToMs(time) {
     const [sec, ms] = seconds.split('.');
     return (parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(sec)) * 1000 + parseInt(ms);
 }
-
-// Mise à jour du classement toutes les secondes
-setInterval(displayRanking, 1000);
 
 // Affichage initial
 document.addEventListener('DOMContentLoaded', displayRanking);

@@ -22,7 +22,7 @@ function displayCategories() {
     categories.forEach((category, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${category.name}</td>
+            <td>${escapeHtml(category.name)}</td>
             <td>${category.minAge}</td>
             <td>${category.maxAge}</td>
             <td>
@@ -37,12 +37,18 @@ function displayCategories() {
  * Ajoute une nouvelle catégorie
  */
 function addCategory() {
-    const name = document.getElementById('category-name').value;
+    const name = document.getElementById('category-name').value.trim();
     const minAge = parseInt(document.getElementById('min-age').value);
     const maxAge = parseInt(document.getElementById('max-age').value);
 
+    // Validation des entrées
     if (!name || isNaN(minAge) || isNaN(maxAge)) {
         alert('Veuillez remplir tous les champs correctement');
+        return;
+    }
+
+    if (minAge < 0 || maxAge < 0) {
+        alert('Les âges ne peuvent pas être négatifs');
         return;
     }
 
@@ -51,22 +57,33 @@ function addCategory() {
         return;
     }
 
-    categories.push({
-        name: name,
-        minAge: minAge,
-        maxAge: maxAge
-    });
+    // Vérification des doublons
+    if (categories.some(cat => cat.name.toLowerCase() === name.toLowerCase())) {
+        alert('Cette catégorie existe déjà');
+        return;
+    }
 
-    // Sauvegarde dans le localStorage
-    localStorage.setItem('categories', JSON.stringify(categories));
+    try {
+        categories.push({
+            name: name,
+            minAge: minAge,
+            maxAge: maxAge
+        });
 
-    // Réinitialisation des champs
-    document.getElementById('category-name').value = '';
-    document.getElementById('min-age').value = '';
-    document.getElementById('max-age').value = '';
+        // Sauvegarde dans le localStorage
+        localStorage.setItem('categories', JSON.stringify(categories));
 
-    // Mise à jour de l'affichage
-    displayCategories();
+        // Réinitialisation des champs
+        document.getElementById('category-name').value = '';
+        document.getElementById('min-age').value = '';
+        document.getElementById('max-age').value = '';
+
+        // Mise à jour de l'affichage
+        displayCategories();
+    } catch (error) {
+        console.error('Erreur lors de la sauvegarde :', error);
+        alert('Une erreur est survenue lors de la sauvegarde');
+    }
 }
 
 /**
@@ -78,6 +95,16 @@ function deleteCategory(index) {
         localStorage.setItem('categories', JSON.stringify(categories));
         displayCategories();
     }
+}
+
+// Fonction utilitaire pour échapper le HTML
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 // Initialisation

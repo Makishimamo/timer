@@ -26,16 +26,22 @@ function displayCategoryRankings() {
     const laps = JSON.parse(localStorage.getItem('laps') || '[]');
     const categories = JSON.parse(localStorage.getItem('categories') || '[]');
 
+    console.log('Categories:', categories); // Debug
+    console.log('Laps:', laps); // Debug
+
     // Filtrer les tours avec dossard et info coureur
     const validLaps = laps.filter(lap => lap.dossard && lap.runnerInfo);
+    console.log('Valid Laps:', validLaps); // Debug
 
     categories.forEach(category => {
+        console.log('Processing category:', category); // Debug
+        
         // Filtrer les tours par catégorie et par sexe
         const maleLaps = validLaps.filter(lap => {
             const age = new Date().getFullYear() - lap.runnerInfo.anneeNaissance;
-            return lap.runnerInfo.sexe === 'M' && 
-                   age >= category.minAge && 
-                   age <= category.maxAge;
+            const isInCategory = age >= category.minAge && age <= category.maxAge;
+            console.log(`Lap ${lap.dossard}: age=${age}, sexe=${lap.runnerInfo.sexe}, inCategory=${isInCategory}`); // Debug
+            return lap.runnerInfo.sexe === 'H' && isInCategory;
         });
 
         const femaleLaps = validLaps.filter(lap => {
@@ -44,6 +50,8 @@ function displayCategoryRankings() {
                    age >= category.minAge && 
                    age <= category.maxAge;
         });
+
+        console.log(`Category ${category.name}: Male laps=${maleLaps.length}, Female laps=${femaleLaps.length}`); // Debug
 
         // Créer les tableaux de classement pour chaque sexe
         const maleRanking = createCategoryTable(category.name, maleLaps);
@@ -149,7 +157,4 @@ function convertTimeToMs(time) {
 document.addEventListener('DOMContentLoaded', function() {
     displayCategoryRankings();
     document.getElementById('export-pdf').addEventListener('click', exportToPDF);
-    
-    // Mise à jour toutes les secondes
-    setInterval(displayCategoryRankings, 1000);
 }); 

@@ -11,6 +11,7 @@ const startBtn = document.getElementById('startBtn');
 const lapBtn = document.getElementById('lapBtn');
 const stopBtn = document.getElementById('stopBtn');
 const resetBtn = document.getElementById('resetBtn');
+const calculateBtn = document.getElementById('calculateBtn');
 const lapsList = document.getElementById('lapsList');
 
 /**
@@ -178,6 +179,47 @@ function resetTimer() {
 }
 
 /**
+ * Calcule le classement des coureurs.
+ */
+function calculateRanking() {
+    if (laps.length === 0) {
+        alert("Aucun temps enregistré pour calculer le classement !");
+        return;
+    }
+
+    // Vérifier que tous les tours ont un dossard associé
+    const incompleteLaps = laps.filter(lap => !lap.dossard);
+    if (incompleteLaps.length > 0) {
+        alert("Certains tours n'ont pas de dossard associé. Veuillez compléter tous les tours avant de calculer le classement.");
+        return;
+    }
+
+    // Trier les tours par temps
+    const sortedLaps = [...laps].sort((a, b) => {
+        const timeA = convertTimeToMs(a.time);
+        const timeB = convertTimeToMs(b.time);
+        return timeA - timeB;
+    });
+
+    // Sauvegarder le classement dans le localStorage
+    localStorage.setItem('ranking', JSON.stringify(sortedLaps));
+    
+    // Rediriger vers la page de classement
+    window.location.href = 'classement.html';
+}
+
+/**
+ * Convertit un temps formaté en millisecondes.
+ * @param {string} time - Temps au format HH:MM:SS.mmm
+ * @returns {number} - Temps en millisecondes
+ */
+function convertTimeToMs(time) {
+    const [hours, minutes, seconds] = time.split(':');
+    const [sec, ms] = seconds.split('.');
+    return (parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(sec)) * 1000 + parseInt(ms);
+}
+
+/**
  * Initialisation des événements.
  */
 function initializeEventListeners() {
@@ -185,6 +227,7 @@ function initializeEventListeners() {
     lapBtn.addEventListener('click', recordLap);
     stopBtn.addEventListener('click', stopTimer);
     resetBtn.addEventListener('click', resetTimer);
+    calculateBtn.addEventListener('click', calculateRanking);
     document.getElementById("export-button").addEventListener("click", exportToExcel);
 
     // Touche espace pour démarrer/arrêter

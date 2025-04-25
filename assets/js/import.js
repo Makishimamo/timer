@@ -29,13 +29,19 @@ function importExcelData() {
         }
 
         // Traitement des données
-        const runners = jsonData.map(row => ({
-            dossard: row.DOSSARD.toString(),
-            nom: row.NOM,
-            prenom: row.PRENOM,
-            sexe: row.SEXE,
-            anneeNaissance: row.ANNEE_NAISSANCE
-        }));
+        const runners = jsonData.map(row => {
+            const sexe = row.SEXE.toString().trim().toUpperCase();
+            if (sexe !== 'H' && sexe !== 'F') {
+                throw new Error(`Format de sexe invalide pour le coureur ${row.NOM} ${row.PRENOM}. Utilisez 'H' ou 'F'.`);
+            }
+            return {
+                dossard: row.DOSSARD.toString(),
+                nom: row.NOM,
+                prenom: row.PRENOM,
+                sexe: sexe,
+                anneeNaissance: row.ANNEE_NAISSANCE
+            };
+        });
 
         // Sauvegarde dans le localStorage
         localStorage.setItem('runners', JSON.stringify(runners));
