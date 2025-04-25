@@ -59,6 +59,14 @@ function stopTimer() {
         stopBtn.disabled = true;
         lapBtn.disabled = true;
         console.log("La course est arrêtée !");
+
+        // Sauvegarde automatique de la course en cours
+        if (laps.length > 0) {
+            const currentRace = storageManager.getCurrentRace();
+            if (!currentRace) {
+                storageManager.saveRace(`Course du ${new Date().toLocaleDateString()}`);
+            }
+        }
     }
 }
 
@@ -252,7 +260,15 @@ function initializeEventListeners() {
 }
 
 // Initialisation des événements au chargement de la page
-document.addEventListener("DOMContentLoaded", initializeEventListeners);
-
-// Initialisation
-resetTimer();
+document.addEventListener("DOMContentLoaded", function() {
+    initializeEventListeners();
+    
+    // Charger la course en cours s'il y en a une
+    const currentRace = storageManager.getCurrentRace();
+    if (currentRace) {
+        laps = currentRace.laps;
+        displayLaps();
+    }
+    
+    resetTimer();
+});

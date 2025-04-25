@@ -579,3 +579,71 @@ tr:nth-child(even) {
     opacity: 0.9;
     transition: opacity 0.3s ease;
 }
+
+/* Styles pour la gestion des courses */
+.races-container {
+    padding: 20px;
+}
+
+.races-actions {
+    margin-bottom: 30px;
+    display: flex;
+    gap: 10px;
+}
+
+.race-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.race-card.current {
+    border-left: 4px solid #3498db;
+}
+
+.race-card h3 {
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+}
+
+.race-card p {
+    margin: 5px 0;
+    color: #7f8c8d;
+}
+
+.race-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.primary-btn {
+    background-color: #3498db;
+    color: white;
+}
+
+.secondary-btn {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.danger-btn {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.primary-btn:hover, .secondary-btn:hover, .danger-btn:hover {
+    opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    .races-actions {
+        flex-direction: column;
+    }
+    
+    .race-actions {
+        flex-direction: column;
+    }
+}

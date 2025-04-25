@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chronomètre</title>
+    <title>Gestion des Courses</title>
     <link rel="stylesheet" href="./assets/css/styles.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
             </div>
             <ul class="sidebar-menu">
                 <li>
-                    <a href="index.html" class="active">
+                    <a href="index.html">
                         <span class="icon">⏱️</span>
                         <span class="text">Chronomètre</span>
                     </a>
@@ -45,7 +45,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="courses.html">
+                    <a href="courses.html" class="active">
                         <span class="icon">📁</span>
                         <span class="text">Courses sauvegardées</span>
                     </a>
@@ -55,26 +55,32 @@
 
         <!-- Contenu principal -->
         <main class="main-content">
-            <h1>Chronomètre</h1>
-            <div class="timer-container">
-                <div class="timer-display" id="timer">00:00:00.000</div>
-                <div class="timer-controls">
-                    <button id="startBtn" class="timer-btn">Démarrer</button>
-                    <button id="lapBtn" class="timer-btn">Tour</button>
-                    <button id="stopBtn" class="timer-btn" disabled>Arrêter</button>
-                    <button id="resetBtn" class="timer-btn">Réinitialiser</button>
-                    <button id="calculateBtn" class="timer-btn">Calculer le classement</button>
+            <h1>Gestion des Courses</h1>
+            
+            <div class="races-container">
+                <div class="races-actions">
+                    <button id="new-race-btn" class="primary-btn">Nouvelle Course</button>
+                    <button id="save-current-btn" class="primary-btn">Sauvegarder la course actuelle</button>
                 </div>
-            </div>
 
-            <div class="laps-container">
-                <h2>Tours</h2>
-                <div class="laps-list" id="lapsList"></div>
+                <div class="current-race-info">
+                    <h2>Course actuelle</h2>
+                    <div id="current-race-details">
+                        <!-- Rempli par JavaScript -->
+                    </div>
+                </div>
+
+                <div class="saved-races">
+                    <h2>Courses sauvegardées</h2>
+                    <div id="races-list">
+                        <!-- Rempli par JavaScript -->
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
     <script src="./assets/js/storage-manager.js"></script>
-    <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/courses.js"></script>
 </body>
-</html>
+</html> 
